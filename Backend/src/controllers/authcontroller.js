@@ -1,5 +1,5 @@
 const authRouter = require("express").Router();
-const crypto = require("crypto");
+const bcrypt = require("bcryptjs");
 const userModel = require('../models/user.model')
 const jwt = require("jsonwebtoken");
 
@@ -26,7 +26,7 @@ async function registerController(req, res) {
 
 
     // hash the password
-    const hashedPassword = crypto.createHash("sha256").update(password).digest("hex");
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // creating user in the database
     const user = await userModel.create({
@@ -62,17 +62,17 @@ async function loginController(req, res) {
 
     const user = await userModel.findOne({
         $or: [
-            { email },
-            { username }
+            { email: email },
+            { username: username }
         ]
     })  
      if (!user) {
         return res.status(404).json({
-            message: "User not found",
+            message: "User not found with the given email or username",
         });
     }
-    const hashedPassword = crypto.createHash("sha256").update(password).digest("hex");
-    if (hashedPassword !== user.password) {
+    const hashedPassword = await bcrypt.compare(password, user.password);
+    if (!hashedPassword) {
         return res.status(401).json({
             message: "Invalid credentials",
         });
