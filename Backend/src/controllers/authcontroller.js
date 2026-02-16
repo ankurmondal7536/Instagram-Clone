@@ -65,8 +65,8 @@ async function loginController(req, res) {
             { email: email },
             { username: username }
         ]
-    })  
-     if (!user) {
+    })
+    if (!user) {
         return res.status(404).json({
             message: "User not found with the given email or username",
         });
@@ -77,24 +77,24 @@ async function loginController(req, res) {
             message: "Invalid credentials",
         });
     }
-    else if (hashedPassword === user.password) {
-        const token = jwt.sign({
-            id : user._id,
 
-        }, process.env.JWT_SECRET, {
-            expiresIn: "1d",
-        })
-        res.cookie("token", token)
-        res.status(200).json({
-            message: "User logged in successfully",
-            user: {
-                username: user.username,
-                email: user.email,
-                bio: user.bio,
-                profilePic: user.profilePic
-            }
-        })
-    }
+    const token = jwt.sign({
+        id: user._id,
+
+    }, process.env.JWT_SECRET, {
+        expiresIn: "1d",
+    })
+    res.cookie("token", token)
+    res.status(200).json({
+        message: "User logged in successfully",
+        user: {
+            username: user.username,
+            email: user.email,
+            bio: user.bio,
+            profilePic: user.profilePic
+        }
+    })
+
 }
 
 
