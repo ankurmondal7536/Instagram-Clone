@@ -7,5 +7,12 @@ const identifyUser = require("../middlewares/auth.middleware")
 // POST /api/users/follow/:username
 userRouter.post("/follow/:username", identifyUser, userController.followUserController)
 
+// unfollow routes
+// POST /api/users/unfollow/:username
+userRouter.post("/unfollow/:username", identifyUser, userController.unfollowUserController) 
+
+
+
+// userRouter.get("/follow/pendingrequests", identifyUser, userController.getPendingFollowRequestsController)
 
 module.exports = userRouter;

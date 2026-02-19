@@ -34,6 +34,9 @@ async function followUserController(req, res) {
             follow: alreadyFollowing
         })
      }   
+// check if followee wants to accept or reject the follow request
+
+
 // create a follow record in the database
      const followRecord = await followModel.create({
         follower: followerUserName,
@@ -46,7 +49,29 @@ async function followUserController(req, res) {
 
 }
 
+async function unfollowUserController(req, res) {
+     const followerUser = req.user.username
+     const followeeUser = req.params.username
 
+     const isUserfollowing = await followModel.findOne({
+        follower: followerUser,
+        followee: followeeUser  
+})
+
+
+        if (!isUserfollowing) {
+            return res.status(400).json({
+                message: `You are not following ${followeeUser}`
+            })
+        }
+        await followModel.findByIdAndDelete(
+            isUserfollowing._id
+        )
+        res.status(200).json({
+            message: `You have unfollowed ${followeeUser}`
+        })
+}
 module.exports = {
-    followUserController
+    followUserController,
+    unfollowUserController
 }
