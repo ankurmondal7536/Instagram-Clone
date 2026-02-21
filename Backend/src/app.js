@@ -1,9 +1,17 @@
 require("dotenv").config();
+const cors = require("cors");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const app = express();
 
 app.use(express.json());
+
+// cors error fix
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
+
 app.use(cookieParser());
 
 
@@ -11,7 +19,6 @@ app.use(cookieParser());
 const postRouter = require("./routes/post.routes");
 const authRouter = require("./routes/auth.routes");
 const userRouter = require("./routes/user.routes");
-
 
 
 // using routes
