@@ -1,52 +1,60 @@
-  import React, { useState } from 'react'
-  import "../styles/form.scss"
-  import { Link } from 'react-router'
-  import axios from 'axios'
-  const Login = () => {
+import React, { useState } from 'react'
+import "../styles/form.scss"
+import { Link } from 'react-router'
+import axios from 'axios'
+import { useAuth } from '../hooks/useAuth'
+import { useNavigate } from 'react-router'
 
 
-    const [username, setusername] = useState("")
-    const [password, setpassword] = useState("")
+const Login = () => {
 
-async function handleSubmit(e){
-  e.preventDefault()
-  axios.post("http://localhost:3000/api/auth/login", {
-    username,
-    password
-  },{
-    withCredentials: true
-  }).then(res => {
-    console.log(res.data)
-  })
-  // setting placeholders as default values to avoid uncontrolled input error
-  setusername("")
-  setpassword("")
-  
+  const { user, loading, handleLogin } = useAuth()
+
+    const [ username, setUsername ] = useState("")
+    const [ password, setPassword ] = useState("")
+
+    const navigate = useNavigate()
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+
+        await handleLogin(username, password)
+
+        navigate('/')
+
+    }
+
+    if (loading) {
+        return (<main>
+            <h1>Loading.....</h1>
+        </main>)
+    }
+
+
+  return (
+    <main>
+      <div className="form-container">
+        <h1>Login</h1>
+        <form onSubmit={handleSubmit}>
+          <input
+            onInput={(e) => { setUsername(e.target.value) }}
+            type="text"
+            name='username'
+            id='username'
+            placeholder='Enter username' />
+          <input
+            onInput={(e) => { setPassword(e.target.value) }}
+            type="password"
+            name='password'
+            id='password'
+            placeholder='Enter password' />
+
+          <button type='submit'>Login</button>
+        </form>
+        <p>Don't have an account? <Link className='toggleAuthForm' to="/register">Register</Link></p>
+      </div>
+    </main>
+  )
 }
 
-
-    return (
-      <main>
-        <div className="form-container">
-          <h1>Login</h1>
-          <form onSubmit={handleSubmit}>
-            <input onChange={(e) => { setusername(e.target.value) }}
-            value={username}
-            type="text" 
-            placeholder='username' />
-
-            <input onChange={(e) => { setpassword(e.target.value) }}
-            type='password'
-            value={password}
-            placeholder='password' />
-
-            <button type='submit'>Login</button>
-          </form>
-          <p>Don't have an account? <Link className='toggleAuthForm' to="/register">Register</Link></p>
-        </div>
-
-      </main>
-    )
-  }
-
-  export default Login
+export default Login
