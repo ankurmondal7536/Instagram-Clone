@@ -2,13 +2,16 @@ import React from 'react'
 import { AppRoutes } from './appRoutes'
 import "./style.scss"
 import { AuthProvider } from './features/auth/auth.context'
+import { PostContextProvider } from './features/posts/post.context'
 
 const App = () => {
   return (
- 
-  <AuthProvider>
-    <AppRoutes />
-  </AuthProvider>
+
+    <AuthProvider>
+      <PostContextProvider>
+        <AppRoutes />
+      </PostContextProvider>
+    </AuthProvider>
 
   )
 }

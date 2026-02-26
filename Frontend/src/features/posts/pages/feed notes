@@ -1,0 +1,27 @@
+ {/* Actions Section */}
+            <div className="post-actions">
+                <div className="left-icons">
+                    <button><RiPokerHeartsLine /></button>
+                    <button><RiMessage2Line /></button>
+                    <button><RiShareForwardLine /></button>
+                </div>
+                <div className="right-icons">
+                    <button><RiBookmarkLine /></button>
+                </div>
+            </div>
+
+            {/* Details Section */}
+            <div className="post-details">
+                {/* BACKEND: post.likes */}
+                <p className="likes-count">{post.likes} likes</p>
+
+                <p className="caption">
+                    <span className="bold-username">{post.username}</span>
+                    {/* BACKEND: post.caption */}
+                    {post.caption}
+                </p>
+
+                {/* BACKEND: post.commentsCount */}
+                <p className="view-comments">View all {post.commentsCount} comments</p>
+            </div>
+

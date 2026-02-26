@@ -67,7 +67,7 @@ async function loginController(req, res) {
             { email: email },
             { username: username }
         ]
-    })
+    }).select("+password")
     if (!user) {
         return res.status(404).json({
             message: "User not found with the given email or username",
